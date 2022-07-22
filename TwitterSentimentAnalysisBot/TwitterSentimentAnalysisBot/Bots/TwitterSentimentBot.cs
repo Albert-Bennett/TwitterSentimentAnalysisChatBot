@@ -26,9 +26,17 @@ namespace TwitterSentimentAnalysisBot.Bots
         {
             var userInput = turnContext.Activity.Text;
             var response = await _twitterAnalysisAppService.GetSentimentAnalysisForTweets(userInput, 2);
-            var adaptiveCard = AdaptiveCardConstructor.GetAnalysisCard(response);
 
-            await turnContext.SendActivityAsync(MessageFactory.Attachment(adaptiveCard));
+            if (response == null)
+            {
+                string errorText = "There was an issue contacting the function app";
+                await turnContext.SendActivityAsync(MessageFactory.Text(errorText, errorText), cancellationToken);
+            }
+            else
+            {
+                var adaptiveCard = AdaptiveCardConstructor.GetAnalysisCard(response);
+                await turnContext.SendActivityAsync(MessageFactory.Attachment(adaptiveCard));
+            }
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)

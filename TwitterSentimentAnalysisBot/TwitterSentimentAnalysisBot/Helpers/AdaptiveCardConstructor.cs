@@ -30,9 +30,73 @@ namespace TwitterSentimentAnalysisBot.Helpers
 
         static IEnumerable<AdaptiveElement> GetPopularTweetCards(TweetData[] mostPopularTweets)
         {
+            List<AdaptiveElement> result = new List<AdaptiveElement>();
+
+            foreach (TweetData tweet in mostPopularTweets)
+            {
+                result.AddRange(GetPopularTweetCard(tweet));
+            }
+
+            return result;
+        }
+
+        private static IEnumerable<AdaptiveElement> GetPopularTweetCard(TweetData tweet)
+        {
             return new List<AdaptiveElement>
             {
-
+                new AdaptiveTextBlock
+                {
+                        Size = AdaptiveTextSize.Medium,
+                        Weight = AdaptiveTextWeight.Bolder,
+                        Text = tweet.text,
+                        Wrap = true
+                },
+                new AdaptiveColumnSet
+                {
+                    Columns = new List<AdaptiveColumn>
+                    {
+                        new AdaptiveColumn
+                        {
+                            Items = new List<AdaptiveElement>
+                            {
+                                new AdaptiveTextBlock
+                                {
+                                    Spacing = AdaptiveSpacing.None,
+                                    IsSubtle = true,
+                                    Wrap = true,
+                                    Text = $"Likes: {tweet.public_metrics.like_count}"
+                                },
+                                new AdaptiveTextBlock
+                                {
+                                    Spacing = AdaptiveSpacing.None,
+                                    IsSubtle = true,
+                                    Wrap = true,
+                                    Text = $"Retweets: {tweet.public_metrics.retweet_count}"
+                                }
+                            }
+                        },
+                        new AdaptiveColumn
+                        {
+                            Items = new List<AdaptiveElement>
+                            {
+                                new AdaptiveTextBlock
+                                {
+                                    Spacing = AdaptiveSpacing.None,
+                                    IsSubtle = true,
+                                    Wrap = true,
+                                    Text = $"Replies: {tweet.public_metrics.reply_count}"
+                                },
+                                new AdaptiveTextBlock
+                                {
+                                    Spacing = AdaptiveSpacing.None,
+                                    IsSubtle = true,
+                                    Wrap = true,
+                                    Text = $"Quote count: {tweet.public_metrics.quote_count}"
+                                }
+                            }
+                        }
+                    }
+                }
             };
         }
 
