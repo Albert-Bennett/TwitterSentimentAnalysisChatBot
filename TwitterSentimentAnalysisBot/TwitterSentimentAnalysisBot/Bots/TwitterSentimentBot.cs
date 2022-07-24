@@ -8,7 +8,6 @@ using Microsoft.Bot.Schema;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using TwitterSentimentAnalysisBot.Helpers;
 using TwitterSentimentAnalysisBot.Services.Abstractions;
 
 namespace TwitterSentimentAnalysisBot.Bots
@@ -16,10 +15,13 @@ namespace TwitterSentimentAnalysisBot.Bots
     public class TwitterSentimentBot : ActivityHandler
     {
         readonly ITwitterAnalysisAppService _twitterAnalysisAppService;
+        readonly IAdaptiveCardConstructorService _adaptiveCardConstructorService;
 
-        public TwitterSentimentBot(ITwitterAnalysisAppService twitterAnalysisAppService)
+        public TwitterSentimentBot(ITwitterAnalysisAppService twitterAnalysisAppService, 
+            IAdaptiveCardConstructorService adaptiveCardConstructorService)
         {
             _twitterAnalysisAppService = twitterAnalysisAppService;
+            _adaptiveCardConstructorService = adaptiveCardConstructorService;   
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -34,7 +36,7 @@ namespace TwitterSentimentAnalysisBot.Bots
             }
             else
             {
-                var adaptiveCard = AdaptiveCardConstructor.GetAnalysisCard(response);
+                var adaptiveCard = _adaptiveCardConstructorService.GetAnalysisCard(response);
                 await turnContext.SendActivityAsync(MessageFactory.Attachment(adaptiveCard));
             }
         }

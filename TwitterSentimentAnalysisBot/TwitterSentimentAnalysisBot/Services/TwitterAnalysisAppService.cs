@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,15 +10,13 @@ namespace TwitterSentimentAnalysisBot.Services
     public class TwitterAnalysisAppService : ITwitterAnalysisAppService
     {
         readonly IHttpClientFactory _httpClientFactory;
-        readonly IConfiguration _configuration;
         readonly string baseUrl;
 
         public TwitterAnalysisAppService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
 
-            baseUrl = _configuration["TwitterSentimentAnalysisBaseUrl"];
+            baseUrl = configuration["TwitterSentimentAnalysisBaseUrl"];
         }
 
         public async Task<TwitterSentimentResponse> GetSentimentAnalysisForTweets(string searchTerm, int? maxResults = 10)

@@ -40,6 +40,7 @@ namespace TwitterSentimentAnalysisBot
             services.AddTransient<IBot, Bots.TwitterSentimentBot>();
 
             services.AddTransient<ITwitterAnalysisAppService, TwitterAnalysisAppService>();
+            services.AddTransient<IAdaptiveCardConstructorService, AdaptiveCardConstructorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
